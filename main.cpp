@@ -3,6 +3,7 @@
 #include <unordered_map>
 #include <map>
 #include <iostream>
+#include <memory>
 
 template<typename T>
 class cache{
@@ -19,7 +20,7 @@ public:
             auto v = ssitr->second;
             if (m_lookup.size() == m_s){
                 auto p = *m_store.begin();
-                std::copy(m_store.begin() + 1, m_store.end(), m_store.begin());
+                std::uninitialized_move(m_store.begin() + 1, m_store.end(), m_store.begin());
                 auto k = std::get<0>(p);
                 m_lookup.erase(k);
             }
@@ -29,7 +30,7 @@ public:
         }else{
             auto v = std::get<1>(itr->second);
             auto itr = std::find(m_store.begin(), m_store.end(), std::make_tuple(k, v));
-            std::copy(itr + 1, m_store.end(), itr);
+            std::uninitialized_move(itr + 1, m_store.end(), itr);
             m_store.back() = std::make_tuple(k, v);
         }
     }
@@ -41,7 +42,7 @@ public:
             auto v = ssitr->second;
             if (m_lookup.size() == m_s){
                 auto p = *m_store.begin();
-                std::copy(m_store.begin() + 1, m_store.end(), m_store.begin());
+                std::uninitialized_move(m_store.begin() + 1, m_store.end(), m_store.begin());
                 auto k = std::get<0>(p);
                 m_lookup.erase(k);
             }
@@ -53,7 +54,7 @@ public:
         }else{
             auto v = std::get<1>(itr->second);
             auto itr = std::find(m_store.begin(), m_store.end(), std::make_tuple(k, v));
-            std::copy(itr + 1, m_store.end(), itr);
+            std::uninitialized_move(itr + 1, m_store.end(), itr);
             m_store.back() = std::make_tuple(k, v);
 
             return v;
@@ -90,5 +91,12 @@ int main(){
      for (const auto& i : c.m_store){
         std::cout << std::get<1>(i) << " ";
         // print 1 3
+    }
+    std::cout << "\n";
+    c.get(2);
+    std::cout << "after inserting 2             ";
+      for (const auto& i : c.m_store){
+        std::cout << std::get<1>(i) << " ";
+        // print 3 2
     }
 }
