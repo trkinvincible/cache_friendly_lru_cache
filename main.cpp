@@ -24,7 +24,9 @@ public:
                 auto k = std::get<0>(p);
                 m_lookup.erase(k);
             }
-            std::rotate(m_store.begin(), m_store.begin() + 1, m_store.end());
+           else{
+                std::rotate(m_store.begin(), m_store.begin() + 1, m_store.end());
+            }
             m_store.back() = std::make_tuple(k, v);
             m_lookup[k] = std::make_tuple(k, v);
         }else{
@@ -45,8 +47,9 @@ public:
                 std::uninitialized_move(m_store.begin() + 1, m_store.end(), m_store.begin());
                 auto k = std::get<0>(p);
                 m_lookup.erase(k);
+            }else{
+                std::rotate(m_store.begin(), m_store.begin() + 1, m_store.end());
             }
-            std::rotate(m_store.begin(), m_store.begin() + 1, m_store.end());
             m_store.back() = std::make_tuple(k, v);
             m_lookup[k] = std::make_tuple(k, v);
 
